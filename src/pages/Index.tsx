@@ -1,13 +1,22 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import { ChatSidebar } from "@/components/ChatSidebar";
+import { ChatInterface } from "@/components/ChatInterface";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Index = () => {
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <ChatSidebar 
+          currentChatId={currentChatId}
+          onChatSelect={setCurrentChatId}
+        />
+        <ChatInterface chatId={currentChatId} />
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
