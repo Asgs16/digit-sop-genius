@@ -90,11 +90,7 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
     <div className="flex-1 flex flex-col h-screen">
       {/* Header */}
       <div className="border-b border-border p-4 flex items-center gap-3">
-        <SidebarTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <Menu className="w-5 h-5" />
-          </Button>
-        </SidebarTrigger>
+        <SidebarTrigger />
         <div>
           <h2 className="font-semibold">Digit GPT</h2>
           <p className="text-sm text-muted-foreground">Your AI assistant for internal operations</p>
