@@ -1,5 +1,5 @@
 
-import { Plus, MessageSquare, Settings, LogOut } from "lucide-react";
+import { Plus, MessageSquare, Settings, LogOut, AlertCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,20 +18,46 @@ import { Separator } from "@/components/ui/separator";
 interface ChatSidebarProps {
   currentChatId: string | null;
   onChatSelect: (chatId: string) => void;
+  onQuickQuestion: (question: string) => void;
 }
 
-export function ChatSidebar({ currentChatId, onChatSelect }: ChatSidebarProps) {
-  // Mock chat history - in real app this would come from your backend
-  const chats = [
-    { id: "1", title: "Claims Processing SOP", timestamp: "2 hours ago" },
-    { id: "2", title: "Customer Onboarding", timestamp: "1 day ago" },
-    { id: "3", title: "Policy Renewal Process", timestamp: "3 days ago" },
-    { id: "4", title: "Underwriting Guidelines", timestamp: "1 week ago" },
+export function ChatSidebar({ currentChatId, onChatSelect, onQuickQuestion }: ChatSidebarProps) {
+  // Jenkins error scenarios with common issues
+  const jenkinsErrors = [
+    "Build #45 failed - compilation error",
+    "Pipeline timeout in Deploy stage",
+    "Git checkout failed - authentication",
+    "Maven dependency resolution failed",
+    "Docker build failed - insufficient space",
+    "Test failures in integration tests",
+    "Node offline - agent disconnected",
+    "Workspace cleanup failed",
+    "Permission denied on deployment",
+    "Environment variables not set",
+    "Build trigger webhook failed",
+    "Artifact upload to Nexus failed",
+    "SonarQube quality gate failed",
+    "Database migration script error",
+    "Load balancer health check failed",
+    "SSL certificate validation error",
+    "Memory leak detected in build",
+    "Parallel builds conflict detected",
+    "Build stuck in pending status",
+    "Post-build email notification failed"
   ];
 
   const handleNewChat = () => {
-    const newChatId = Date.now().toString();
+    // Generate a new unique chat ID and switch to it
+    const newChatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     onChatSelect(newChatId);
+  };
+
+  const handleJenkinsError = (error: string) => {
+    // Create a new chat for this Jenkins error
+    const newChatId = `jenkins-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    onChatSelect(newChatId);
+    // Send the Jenkins error as the first message
+    onQuickQuestion(`I'm experiencing this Jenkins issue: "${error}". Can you help me troubleshoot and resolve this?`);
   };
 
   return (
@@ -41,7 +67,7 @@ export function ChatSidebar({ currentChatId, onChatSelect }: ChatSidebarProps) {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
             D
           </div>
-          <h1 className="text-xl font-bold">Digit GPT</h1>
+          <h1 className="text-xl font-bold">DevOps Assistant</h1>
         </div>
         <Button 
           onClick={handleNewChat}
@@ -54,23 +80,25 @@ export function ChatSidebar({ currentChatId, onChatSelect }: ChatSidebarProps) {
 
       <SidebarContent className="px-4">
         <SidebarGroup>
-          <SidebarGroupLabel>Recent Conversations</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500" />
+            Common Jenkins Issues
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {chats.map((chat) => (
-                <SidebarMenuItem key={chat.id}>
+              {jenkinsErrors.map((error, index) => (
+                <SidebarMenuItem key={index}>
                   <SidebarMenuButton 
-                    onClick={() => onChatSelect(chat.id)}
-                    isActive={currentChatId === chat.id}
-                    className="w-full justify-start p-3 hover:bg-accent transition-colors"
+                    onClick={() => handleJenkinsError(error)}
+                    className="w-full justify-start p-3 hover:bg-accent transition-colors text-left"
                   >
-                    <MessageSquare className="w-4 h-4 mr-3 text-muted-foreground" />
+                    <AlertCircle className="w-4 h-4 mr-3 text-red-500 shrink-0" />
                     <div className="flex flex-col items-start flex-1 min-w-0">
                       <span className="text-sm font-medium truncate w-full">
-                        {chat.title}
+                        {error}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {chat.timestamp}
+                        Click for troubleshooting help
                       </span>
                     </div>
                   </SidebarMenuButton>

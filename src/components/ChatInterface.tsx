@@ -17,9 +17,10 @@ interface Message {
 
 interface ChatInterfaceProps {
   chatId: string | null;
+  onQuickQuestion?: (question: string) => void;
 }
 
-export function ChatInterface({ chatId }: ChatInterfaceProps) {
+export function ChatInterface({ chatId, onQuickQuestion }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,20 +34,67 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
     }
   }, [messages]);
 
+  // Clear messages when chat changes
+  useEffect(() => {
+    setMessages([]);
+  }, [chatId]);
+
+  // Handle quick questions from sidebar
+  useEffect(() => {
+    if (onQuickQuestion) {
+      onQuickQuestion = (question: string) => {
+        handleQuickQuestion(question);
+      };
+    }
+  }, []);
+
+  const handleQuickQuestion = async (question: string) => {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: question,
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const aiResponse = await generateAIResponse(question);
+      
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: aiResponse,
+        isUser: false,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Error generating AI response:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Mock AI response for DevOps operations
   const generateAIResponse = async (userMessage: string): Promise<string> => {
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
     
     const lowerMessage = userMessage.toLowerCase();
     
-    if (lowerMessage.includes("jenkins") && lowerMessage.includes("build")) {
-      return "**Jenkins Build Issues - Troubleshooting Steps:**\n\n🔧 **Common Build Failures:**\n• Check build logs for compilation errors\n• Verify workspace cleanup\n• Ensure all dependencies are available\n• Check node availability and disk space\n\n**Pre-prod Job Setup:**\n```bash\n# Sample Jenkins pipeline\npipeline {\n  agent any\n  stages {\n    stage('Build') {\n      steps {\n        sh 'mvn clean compile'\n      }\n    }\n  }\n}\n```\n\n**Next Steps:** Check the Jenkins console output and verify your Jenkinsfile syntax.";
-    } else if (lowerMessage.includes("pod") && lowerMessage.includes("restart")) {
-      return "**Pod Restart Issues - Kubernetes Troubleshooting:**\n\n🚨 **Diagnostic Commands:**\n```bash\n# Check pod status\nkubectl get pods -n <namespace>\n\n# Describe failing pod\nkubectl describe pod <pod-name> -n <namespace>\n\n# Check logs\nkubectl logs <pod-name> -n <namespace> --previous\n```\n\n**Common Causes:**\n• Memory/CPU limits exceeded\n• Health check failures\n• Image pull errors\n• ConfigMap/Secret issues\n\n**Quick Fix:** Scale deployment to 0 and back to desired replicas:\n```bash\nkubectl scale deployment <deployment-name> --replicas=0\nkubectl scale deployment <deployment-name> --replicas=3\n```";
-    } else if (lowerMessage.includes("tosca")) {
-      return "**Tosca Implementation Guide:**\n\n🔄 **Setup Steps:**\n1. **Environment Preparation**\n   • Install Tosca Commander\n   • Configure test repository\n   • Set up execution agents\n\n2. **Test Case Creation**\n   • Define test objectives\n   • Create reusable modules\n   • Implement data-driven testing\n\n3. **CI/CD Integration**\n   • Configure Tosca CI client\n   • Set up automated execution\n   • Generate test reports\n\n**Best Practices:**\n• Use Page Objects pattern\n• Implement proper error handling\n• Maintain test data separately";
-    } else if (lowerMessage.includes("aws") || lowerMessage.includes("ec2")) {
-      return "**AWS EC2 Operations Guide:**\n\n☁️ **Common EC2 Tasks:**\n\n**Instance Management:**\n```bash\n# List instances\naws ec2 describe-instances\n\n# Start/Stop instances\naws ec2 start-instances --instance-ids i-1234567890abcdef0\naws ec2 stop-instances --instance-ids i-1234567890abcdef0\n```\n\n**Troubleshooting:**\n• Check Security Groups and NACLs\n• Verify IAM permissions\n• Monitor CloudWatch metrics\n• Check system logs in Console\n\n**Performance Optimization:**\n• Right-size instances based on utilization\n• Use appropriate storage types\n• Enable detailed monitoring\n• Implement auto-scaling policies";
+    if (lowerMessage.includes("compilation error")) {
+      return "**Jenkins Compilation Error - Troubleshooting Steps:**\n\n🔧 **Immediate Actions:**\n• Check the console output for specific compilation errors\n• Verify Java/Maven/Gradle versions match project requirements\n• Ensure all dependencies are correctly specified\n\n**Common Fixes:**\n```bash\n# Clean and rebuild\nmvn clean compile\n# or for Gradle\n./gradlew clean build\n```\n\n**Check These:**\n• Source code syntax errors\n• Missing imports or dependencies\n• Classpath issues\n• Environment-specific configurations\n\n**Next Steps:** Review the full stack trace and fix compilation issues in your IDE first.";
+    } else if (lowerMessage.includes("timeout") && lowerMessage.includes("deploy")) {
+      return "**Pipeline Timeout in Deploy Stage:**\n\n⏱️ **Timeout Analysis:**\n• Check deployment target resource availability\n• Verify network connectivity to deployment servers\n• Review application startup time requirements\n\n**Solutions:**\n```groovy\n// Increase timeout in Jenkinsfile\ntimeout(time: 30, unit: 'MINUTES') {\n    // deployment steps\n}\n```\n\n**Investigation Steps:**\n• Monitor deployment target CPU/Memory usage\n• Check application logs for startup issues\n• Verify database connectivity if applicable\n• Review load balancer health checks\n\n**Prevention:** Implement health check endpoints and optimize application startup time.";
+    } else if (lowerMessage.includes("git") && lowerMessage.includes("authentication")) {
+      return "**Git Authentication Failure:**\n\n🔐 **Authentication Issues:**\n• Verify SSH keys or credentials are correctly configured\n• Check if Git repository URL is accessible\n• Ensure Jenkins has proper permissions\n\n**Quick Fixes:**\n```bash\n# Test SSH connection\nssh -T git@github.com\n\n# Update Git credentials\ngit config --global credential.helper store\n```\n\n**Jenkins Configuration:**\n• Update credentials in Jenkins Credential Manager\n• Verify SSH key is added to Jenkins\n• Check repository URL format (SSH vs HTTPS)\n• Ensure branch permissions are set correctly\n\n**Security Note:** Use SSH keys or tokens instead of passwords for better security.";
+    } else if (lowerMessage.includes("docker") && lowerMessage.includes("insufficient space")) {
+      return "**Docker Build Failed - Insufficient Space:**\n\n💾 **Disk Space Management:**\n```bash\n# Check disk usage\ndf -h\n\n# Clean Docker system\ndocker system prune -af\ndocker image prune -af\ndocker container prune -f\n```\n\n**Prevention Strategies:**\n• Implement automated cleanup scripts\n• Use multi-stage Docker builds\n• Configure Jenkins to clean workspace after builds\n• Set up disk space monitoring alerts\n\n**Quick Actions:**\n• Remove unused Docker images and containers\n• Clear Jenkins workspace\n• Check for large log files\n• Consider using Docker build cache optimization\n\n**Long-term:** Set up automated cleanup policies and disk space monitoring.";
+    } else if (lowerMessage.includes("test failures")) {
+      return "**Integration Test Failures:**\n\n🧪 **Test Debugging Steps:**\n• Review test logs for specific failure reasons\n• Check if test environment is properly configured\n• Verify test data and database state\n\n**Common Issues:**\n```bash\n# Run tests locally first\nmvn test\n# or\nnpm test\n```\n\n**Investigation:**\n• Environment configuration differences\n• Test data dependencies\n• Race conditions in parallel tests\n• External service availability\n• Database schema migrations\n\n**Solutions:**\n• Implement proper test isolation\n• Use test containers for consistent environments\n• Add retry logic for flaky tests\n• Review test execution order dependencies";
+    } else if (lowerMessage.includes("node offline") || lowerMessage.includes("agent disconnected")) {
+      return "**Jenkins Node/Agent Disconnected:**\n\n🔌 **Connection Troubleshooting:**\n• Check network connectivity between master and agent\n• Verify agent machine is running and accessible\n• Review Jenkins agent logs\n\n**Recovery Steps:**\n```bash\n# Restart Jenkins agent service\nsudo systemctl restart jenkins-agent\n\n# Check agent connection\ntelnet jenkins-master 50000\n```\n\n**Common Causes:**\n• Network connectivity issues\n• Agent machine resource exhaustion\n• Firewall or security group blocking\n• Jenkins master overload\n• Agent process crashed\n\n**Prevention:** Set up monitoring for agent health and automated restart scripts.";
     } else {
       return "**DevOps Operations Assistant** 🚀\n\nI can help you with:\n\n**🔧 Jenkins & CI/CD**\n• Build pipeline troubleshooting\n• Job configuration and optimization\n• Pre-prod environment setup\n\n**☁️ AWS & Infrastructure**\n• EC2 instance management\n• Performance monitoring\n• Cost optimization strategies\n\n**🔄 Kubernetes & Containers**\n• Pod restart issues\n• Deployment troubleshooting\n• Resource optimization\n\n**🧪 Test Automation**\n• Tosca implementation\n• Test framework setup\n• Automated testing strategies\n\nWhat specific challenge are you facing today?";
     }
