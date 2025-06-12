@@ -1,5 +1,4 @@
-
-import { Plus, MessageSquare, Settings, LogOut, Tool } from "lucide-react";
+import { Plus, MessageSquare, Settings, LogOut, Wrench } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -83,7 +82,7 @@ export function ChatSidebar({ currentChatId, onChatSelect, onQuickQuestion }: Ch
       <SidebarContent className="px-6">
         <SidebarGroup className="space-y-3">
           <SidebarGroupLabel className="flex items-center gap-3 text-sm font-semibold text-foreground/80 px-3 py-2">
-            <Tool className="w-4 h-4 text-blue-600" />
+            <Wrench className="w-4 h-4 text-blue-600" />
             Common Jenkins Issues
           </SidebarGroupLabel>
           <SidebarGroupContent className="space-y-2">
