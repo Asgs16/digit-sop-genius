@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Send, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -96,7 +95,7 @@ export function ChatInterface({ chatId, onQuickQuestion }: ChatInterfaceProps) {
     } else if (lowerMessage.includes("node offline") || lowerMessage.includes("agent disconnected")) {
       return "**Jenkins Node/Agent Disconnected:**\n\n🔌 **Connection Troubleshooting:**\n• Check network connectivity between master and agent\n• Verify agent machine is running and accessible\n• Review Jenkins agent logs\n\n**Recovery Steps:**\n```bash\n# Restart Jenkins agent service\nsudo systemctl restart jenkins-agent\n\n# Check agent connection\ntelnet jenkins-master 50000\n```\n\n**Common Causes:**\n• Network connectivity issues\n• Agent machine resource exhaustion\n• Firewall or security group blocking\n• Jenkins master overload\n• Agent process crashed\n\n**Prevention:** Set up monitoring for agent health and automated restart scripts.";
     } else {
-      return "**DevOps Operations Assistant** 🚀\n\nI can help you with:\n\n**🔧 Jenkins & CI/CD**\n• Build pipeline troubleshooting\n• Job configuration and optimization\n• Pre-prod environment setup\n\n**☁️ AWS & Infrastructure**\n• EC2 instance management\n• Performance monitoring\n• Cost optimization strategies\n\n**🔄 Kubernetes & Containers**\n• Pod restart issues\n• Deployment troubleshooting\n• Resource optimization\n\n**🧪 Test Automation**\n• Tosca implementation\n• Test framework setup\n• Automated testing strategies\n\nWhat specific challenge are you facing today?";
+      return "**Digit GPT - DevOps Operations Assistant** 🚀\n\nI can help you with:\n\n**🔧 Jenkins & CI/CD**\n• Build pipeline troubleshooting\n• Job configuration and optimization\n• Pre-prod environment setup\n\n**☁️ AWS & Infrastructure**\n• EC2 instance management\n• Performance monitoring\n• Cost optimization strategies\n\n**🔄 Kubernetes & Containers**\n• Pod restart issues\n• Deployment troubleshooting\n• Resource optimization\n\n**🧪 Test Automation**\n• Tosca implementation\n• Test framework setup\n• Automated testing strategies\n\nWhat specific challenge are you facing today?";
     }
   };
 
@@ -145,11 +144,11 @@ export function ChatInterface({ chatId, onQuickQuestion }: ChatInterfaceProps) {
       <div className="border-b border-border/50 p-4 flex items-center gap-3 bg-background/95 backdrop-blur-sm shadow-sm">
         <SidebarTrigger />
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
+          <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
             D
           </div>
           <div>
-            <h2 className="font-semibold text-foreground">DevOps Assistant</h2>
+            <h2 className="font-semibold text-foreground">Digit GPT</h2>
             <p className="text-sm text-muted-foreground">Your AI companion for infrastructure & operations</p>
           </div>
         </div>
@@ -197,18 +196,18 @@ export function ChatInterface({ chatId, onQuickQuestion }: ChatInterfaceProps) {
                   className="min-h-[52px] max-h-32 resize-none pr-12 shadow-lg border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 bg-background/80 backdrop-blur-sm"
                   disabled={isLoading}
                 />
-                <div className="absolute inset-0 rounded-md bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 pointer-events-none" />
+                <div className="absolute inset-0 rounded-md bg-gradient-to-r from-yellow-500/5 via-orange-500/5 to-yellow-500/5 pointer-events-none" />
               </div>
               <Button
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isLoading}
-                className="shrink-0 shadow-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0"
+                className="shrink-0 shadow-lg bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 border-0"
               >
                 <Send className="w-4 h-4" />
               </Button>
             </div>
             <p className="text-xs text-muted-foreground mt-2 text-center">
-              DevOps Assistant can help with Jenkins, AWS, Kubernetes, and automation tasks. Always verify critical operations.
+              Digit GPT can help with Jenkins, AWS, Kubernetes, and automation tasks. Always verify critical operations.
             </p>
           </div>
         </div>
