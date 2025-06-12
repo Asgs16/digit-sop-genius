@@ -1,5 +1,5 @@
 
-import { Plus, MessageSquare, Settings, LogOut, AlertCircle } from "lucide-react";
+import { Plus, MessageSquare, Settings, LogOut, Tool } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -61,45 +61,49 @@ export function ChatSidebar({ currentChatId, onChatSelect, onQuickQuestion }: Ch
   };
 
   return (
-    <Sidebar className="border-r border-border">
-      <SidebarHeader className="p-4">
+    <Sidebar className="border-r border-border/50 shadow-sm">
+      <SidebarHeader className="p-6 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-700 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
             D
           </div>
-          <h1 className="text-xl font-bold">DevOps Assistant</h1>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-700 bg-clip-text text-transparent">
+            DevOps Assistant
+          </h1>
         </div>
         <Button 
           onClick={handleNewChat}
-          className="w-full mt-3 bg-primary hover:bg-primary/90"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white shadow-lg transition-all duration-200 hover:shadow-xl"
         >
           <Plus className="w-4 h-4 mr-2" />
           New Chat
         </Button>
       </SidebarHeader>
 
-      <SidebarContent className="px-4">
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-500" />
+      <SidebarContent className="px-6">
+        <SidebarGroup className="space-y-3">
+          <SidebarGroupLabel className="flex items-center gap-3 text-sm font-semibold text-foreground/80 px-3 py-2">
+            <Tool className="w-4 h-4 text-blue-600" />
             Common Jenkins Issues
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarGroupContent className="space-y-2">
+            <SidebarMenu className="space-y-2">
               {jenkinsErrors.map((error, index) => (
                 <SidebarMenuItem key={index}>
                   <SidebarMenuButton 
                     onClick={() => handleJenkinsError(error)}
-                    className="w-full justify-start p-3 hover:bg-accent transition-colors text-left"
+                    className="w-full justify-start p-4 hover:bg-accent/60 transition-all duration-200 text-left rounded-lg border border-transparent hover:border-border/50 hover:shadow-sm group"
                   >
-                    <AlertCircle className="w-4 h-4 mr-3 text-red-500 shrink-0" />
-                    <div className="flex flex-col items-start flex-1 min-w-0">
-                      <span className="text-sm font-medium truncate w-full">
-                        {error}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        Click for troubleshooting help
-                      </span>
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <div className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 group-hover:bg-blue-500 transition-colors duration-200"></div>
+                      <div className="flex flex-col items-start flex-1 min-w-0 space-y-1">
+                        <span className="text-sm font-medium truncate w-full text-foreground group-hover:text-blue-600 transition-colors duration-200">
+                          {error}
+                        </span>
+                        <span className="text-xs text-muted-foreground group-hover:text-muted-foreground/80">
+                          Click for troubleshooting help
+                        </span>
+                      </div>
                     </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -109,19 +113,19 @@ export function ChatSidebar({ currentChatId, onChatSelect, onQuickQuestion }: Ch
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
-        <Separator className="mb-4" />
-        <SidebarMenu>
+      <SidebarFooter className="p-6 space-y-4">
+        <Separator className="bg-border/50" />
+        <SidebarMenu className="space-y-2">
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Settings className="w-4 h-4" />
-              <span>Settings</span>
+            <SidebarMenuButton className="w-full justify-start p-3 hover:bg-accent/60 transition-all duration-200 rounded-lg">
+              <Settings className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+            <SidebarMenuButton className="w-full justify-start p-3 hover:bg-accent/60 transition-all duration-200 rounded-lg">
+              <LogOut className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Sign Out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
