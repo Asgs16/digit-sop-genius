@@ -27,7 +27,10 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
     }
   }, [messages]);
 
@@ -83,9 +86,9 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto">
       {/* Header */}
-      <div className="border-b border-border/50 p-4 bg-background">
+      <div className="border-b border-border/50 p-4 bg-background shrink-0">
         <div className="flex items-center justify-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
             D
           </div>
           <h1 className="text-xl font-semibold text-foreground">Digit GPT</h1>
@@ -97,8 +100,8 @@ export function ChatInterface({ chatId }: ChatInterfaceProps) {
         {messages.length === 0 ? (
           <WelcomeScreen />
         ) : (
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-6 pb-4">
+          <ScrollArea ref={scrollAreaRef} className="flex-1 px-4">
+            <div className="space-y-6 py-4">
               {messages.map((message) => (
                 <ChatMessage key={message.id} message={message} />
               ))}
